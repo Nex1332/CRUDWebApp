@@ -7,5 +7,8 @@
 <body>
 <p th:text="'Person for id ' + ${person.getId()} + ': ' + ${person.getName()}" />
 <a href="/people">Get back to List</a>
+<br/>
+<br/>
+<a th:href="@{/people/{id}/edit(id=${person.getId()})}">Or Edit this Person</a>
 </body>
 </html>

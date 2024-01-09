@@ -35,4 +35,10 @@ public class PersonDAO {
     public void remove(String personName){
         people.removeIf(person -> Objects.equals(person.getName(), personName));
     }
+
+    public void update(int id, Person editedPerson){
+        Person updatedPerson = show(id);
+
+        updatedPerson.setName(editedPerson.getName());
+    }
 }

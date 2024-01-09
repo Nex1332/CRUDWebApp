@@ -5,9 +5,9 @@
     <title>Delete</title>
 </head>
 <body>
-<form th:method="POST" th:action="@{/people/remove}">
+<form th:method="DELETE" th:action="@{/people/remove}">
     <label for="name">Enter Name for delete:</label>
-    <input type="text" id="name" name="personName">
+    <input type="text" id="name" name="deletedPerson">
 
     <input type="submit" value="DELETE">
 </form>
