@@ -14,6 +14,8 @@ public class Person {
     private String name;
     private Integer age;
 
+    private String email;
+
     public Integer getAge() {
         return age;
     }
@@ -21,8 +23,6 @@ public class Person {
     public void setAge(Integer age) {
         this.age = age;
     }
-
-    private String email;
 
     public Integer getId() {
         return id;

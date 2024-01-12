@@ -1,4 +1,4 @@
-package de.maksym.crud.controllers;
+package de.maksym.crud.controller;
 
 import de.maksym.crud.models.Person;
 import de.maksym.crud.repository.PersonRepository;
@@ -7,6 +7,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.*;
 
 @Controller
 @RequestMapping("/people")
@@ -27,7 +29,8 @@ public class PeopleController {
 
     @GetMapping("/{id}")
     public String show(@PathVariable("id") int id, Model model){
-        model.addAttribute("person", personRepository.findById(id));
+        List<Person> person = (List<Person>) personRepository.findAll();
+        model.addAttribute("person", person.get(id-1));
         return "/show";
     }
 
@@ -48,12 +51,13 @@ public class PeopleController {
 
     @GetMapping("/deletePerson")
     public String deletePerson(){
-        return "people/delete";
+        return "/delete";
     }
 
     @GetMapping("/{id}/edit")
     public String edit(Model model, @PathVariable("id") int id){
-        model.addAttribute("person", personRepository.findById(id));
+        List<Person> person = (List<Person>) personRepository.findAll();
+        model.addAttribute("person", person.get(id-1));
         return "/edit";
     }
 
@@ -63,7 +67,7 @@ public class PeopleController {
         return "redirect:/people";
     }
 
-    @PatchMapping("/{id}")
+    @PostMapping("/{id}")
     public String update(@ModelAttribute("person") Person editPerson,
                          BindingResult bindingResult){
         if(bindingResult.hasErrors())
