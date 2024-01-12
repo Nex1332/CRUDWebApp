@@ -1,8 +1,7 @@
 package de.maksym.crud.controllers;
 
-import de.maksym.crud.DAO.PersonDAO;
 import de.maksym.crud.models.Person;
-import jakarta.validation.Valid;
+import de.maksym.crud.repository.PersonRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -13,37 +12,37 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/people")
 public class PeopleController {
 
-    private final PersonDAO personDAO;
+    private PersonRepository personRepository;
 
     @Autowired
-    public PeopleController(PersonDAO personDAO) {
-        this.personDAO = personDAO;
+    public PeopleController(PersonRepository personRepository) {
+        this.personRepository = personRepository;
     }
 
     @GetMapping()
     public String index(Model model){
-        model.addAttribute("people", personDAO.index());
-        return "people/index";
+        model.addAttribute("people", personRepository.findAll());
+        return "/index";
     }
 
     @GetMapping("/{id}")
     public String show(@PathVariable("id") int id, Model model){
-        model.addAttribute("person", personDAO.show(id));
-        return "people/show";
+        model.addAttribute("person", personRepository.findById(id));
+        return "/show";
     }
 
     @GetMapping("/newPerson")
     public String newPerson(@ModelAttribute("person") Person person){
-        return "people/new";
+        return "/new";
     }
 
     @PostMapping("/save")
-    public String create(@ModelAttribute("person") @Valid Person person,
+    public String create(@ModelAttribute("person") Person person,
                          BindingResult bindingResult){
         if(bindingResult.hasErrors())
-            return "people/new";
+            return "/new";
 
-        personDAO.save(person);
+        personRepository.save(person);
         return "redirect:/people";
     }
 
@@ -54,24 +53,23 @@ public class PeopleController {
 
     @GetMapping("/{id}/edit")
     public String edit(Model model, @PathVariable("id") int id){
-        model.addAttribute("person", personDAO.show(id));
-        return "people/edit";
+        model.addAttribute("person", personRepository.findById(id));
+        return "/edit";
     }
 
     @DeleteMapping("/remove")
-    public String delete(@ModelAttribute("deletedPerson") String deletedPerson){
-        personDAO.remove(deletedPerson);
+    public String delete(@ModelAttribute("idDeletedPerson") int idDeletedPerson){
+        personRepository.deleteById(idDeletedPerson);
         return "redirect:/people";
     }
 
     @PatchMapping("/{id}")
-    public String update(@ModelAttribute("person") @Valid Person editPerson,
-                         BindingResult bindingResult,
-                         @PathVariable("id") int id){
+    public String update(@ModelAttribute("person") Person editPerson,
+                         BindingResult bindingResult){
         if(bindingResult.hasErrors())
-            return "people/edit";
+            return "/edit";
 
-        personDAO.update(id, editPerson);
+        personRepository.save(editPerson);
         return "redirect:/people";
     }
 }
