@@ -15,6 +15,7 @@ import java.util.*;
 public class PeopleController {
 
     private PersonRepository personRepository;
+    private Optional<Person> optionalPerson;
 
     @Autowired
     public PeopleController(PersonRepository personRepository) {
@@ -29,8 +30,10 @@ public class PeopleController {
 
     @GetMapping("/{id}")
     public String show(@PathVariable("id") int id, Model model){
-        List<Person> person = (List<Person>) personRepository.findAll();
-        model.addAttribute("person", person.get(id-1));
+        optionalPerson = personRepository.findById(id);
+        Person person = optionalPerson.get();
+
+        model.addAttribute("person", person);
         return "/show";
     }
 
@@ -56,12 +59,14 @@ public class PeopleController {
 
     @GetMapping("/{id}/edit")
     public String edit(Model model, @PathVariable("id") int id){
-        List<Person> person = (List<Person>) personRepository.findAll();
-        model.addAttribute("person", person.get(id-1));
+        optionalPerson = personRepository.findById(id);
+        Person person = optionalPerson.get();
+
+        model.addAttribute("person", person);
         return "/edit";
     }
 
-    @DeleteMapping("/remove")
+    @PostMapping("/remove")
     public String delete(@ModelAttribute("idDeletedPerson") int idDeletedPerson){
         personRepository.deleteById(idDeletedPerson);
         return "redirect:/people";
