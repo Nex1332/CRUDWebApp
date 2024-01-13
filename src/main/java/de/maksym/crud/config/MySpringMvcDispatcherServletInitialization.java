@@ -1,7 +1,5 @@
 package de.maksym.crud.config;
 
-import jakarta.servlet.ServletContext;
-import jakarta.servlet.ServletException;
 import org.springframework.web.filter.HiddenHttpMethodFilter;
 import org.springframework.web.servlet.support.AbstractAnnotationConfigDispatcherServletInitializer;
 
@@ -13,7 +11,7 @@ public class MySpringMvcDispatcherServletInitialization extends AbstractAnnotati
 
     @Override
     protected Class<?>[] getServletConfigClasses() {
-        return new Class[] {SpringConfig.class};
+        return new Class[] {};
     }
 
     @Override
